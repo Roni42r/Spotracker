@@ -60,6 +60,11 @@ export function portions(items) {
     return Array.from({length:count}, () => ({...item, quantity:1, values:[...values]}));
   });
 }
+function blend(start,end,amount) {
+  const a=start.match(/[0-9a-f]{2}/gi).map(value=>parseInt(value,16));
+  const b=end.match(/[0-9a-f]{2}/gi).map(value=>parseInt(value,16));
+  return '#'+a.map((value,index)=>Math.round(value+(b[index]-value)*amount).toString(16).padStart(2,'0')).join('');
+}
 export function balance(items, goals) {
   if (!items.length) return {label:'Keine Einträge', color:''};
   const totals = sum(items);
@@ -76,13 +81,14 @@ export function balance(items, goals) {
     low += deficit * goal.weight / weight;
     high += excess * goal.weight / weight;
   }
-  if (!missing) return {label:'Im Zielbereich', color:'#c5ebce'};
+  if (!missing) return {label:'Im Zielbereich', color:'#a7f3d0'};
   const overshot = high === low ? above >= below : high > low;
   const strength = Math.min(1, Math.max(overshot ? high : low, (overshot ? above : below) * 0.12) / 30);
-  const hue = overshot ? 65 - 57 * strength : 172 + 46 * strength;
+  const color = overshot ? blend('#a7f3d0','#fca5a5',strength) : blend('#a7f3d0','#bfdbfe',strength);
   const direction = below && above ? 'Ziele teils unter- und überschritten' : overshot ? 'Über Zielbereich' : 'Unter Zielbereich';
-  return {label:direction, color:'hsl('+hue+' 71% '+(89-9*strength)+'%)'};
+  return {label:direction, color};
 }
+
 
 
 
