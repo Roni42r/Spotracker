@@ -16,7 +16,7 @@ Deutschsprachiges Ernährungstagebuch mit Tageszielen, Kalender, Lebensmittelerf
 
 [Offizielle Anleitung zu GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
-GitHub Pages stellt die statische App bereit. Tagebuch, lokale Richtwerte, eigene Korrekturen und Vorlagen funktionieren dort. Für die serverseitige Produktsuche und NanoGPT brauchst du den unten beschriebenen Server. Einträge bleiben im jeweiligen Browserprofil und werden zwischen verschiedenen App-Adressen oder Geräten nicht synchronisiert.
+GitHub Pages stellt die statische App bereit. Öffne **Einstellungen → NanoGPT-KI**, füge deinen NanoGPT-API-Schlüssel ein und wähle ein GPT-Modell. Der Schlüssel bleibt im lokalen Browserspeicher und wird nicht in GitHub gespeichert. Bei der Analyse sendet die App deine Eingabe direkt an NanoGPT; die Nährwerte sind Richtwerte und können API-Kosten verursachen. Die App fragt keine externe Produktdatenbank ab. Einträge bleiben im jeweiligen Browserprofil und werden zwischen verschiedenen App-Adressen oder Geräten nicht synchronisiert.
 
 Nach Änderungen an `public/` aktualisierst du `docs/` mit `node build-pages.mjs` und übernimmst beide Ordner in denselben Commit.
 
@@ -28,10 +28,11 @@ Voraussetzung ist Node.js 24. Unter Windows kannst du `Mahlzeit-starten.cmd` öf
 node --env-file-if-exists=.env dev.mjs
 ```
 
-Rufe dann [localhost:4173](http://127.0.0.1:4173) auf. Die App benötigt keine npm-Abhängigkeiten. Die serverseitige Produktsuche nutzt Open Food Facts.
+Rufe dann [localhost:4173](http://127.0.0.1:4173) auf. Die App benötigt keine npm-Abhängigkeiten. NanoGPT wertet die Eingaben mit dem ausgewählten GPT-Modell aus.
 
-### NanoGPT einrichten
+### NanoGPT auf dem lokalen Server einrichten
 
-Kopiere `.env.example` als `.env`. Trage deinen Schlüssel in `NANOGPT_API_KEY` ein und starte den Server neu. Beim Hosting gehört der Schlüssel in die geheimen Umgebungsvariablen. `.env` und API-Schlüssel gehören nicht in GitHub. `NANOGPT_ENDPOINT` (vollständige Chat-Completions-URL) und `NANOGPT_MODEL` sind optional.
+Kopiere `.env.example` als `.env`. Trage deinen Schlüssel in `NANOGPT_API_KEY` ein und starte den Server neu. Beim Hosting gehört der Schlüssel in die geheimen Umgebungsvariablen. `.env` und API-Schlüssel gehören nicht in GitHub. `NANOGPT_ENDPOINT` (vollständige Chat-Completions-URL) und `NANOGPT_MODEL` sind optional. In **Einstellungen → NanoGPT-KI** kannst du das Modell ändern.
 
 `node build.mjs` baut zusätzlich einen Cloudflare-kompatiblen Worker. Betreibe eine Web-Version mit NanoGPT-Schlüssel hinter einer Zugriffsbeschränkung, damit nur berechtigte Nutzer API-Guthaben verwenden können.
+
